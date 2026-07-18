@@ -4281,6 +4281,11 @@ fi
 # --- SDDM Theme & VT Optimization Configuration ---
 echo -e "\n${BLUE}${BOLD}Configuring SDDM Astronaut theme & VT1 Reuse...${NC}"
 if [ -f /etc/sddm.conf ]; then
+    # Explicitly remove autologin configuration to force login screen
+    sudo sed -i '/^\[Autologin\]/,/^\s*$/d' /etc/sddm.conf 2>/dev/null || true
+    sudo sed -i '/^Session=/d' /etc/sddm.conf 2>/dev/null || true
+    sudo sed -i '/^User=/d' /etc/sddm.conf 2>/dev/null || true
+
     if ! grep -q "^Current=" /etc/sddm.conf; then
         echo -e "\n[Theme]\nCurrent=sddm-astronaut-theme" | sudo tee -a /etc/sddm.conf >/dev/null
     else
