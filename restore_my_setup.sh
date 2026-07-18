@@ -4286,6 +4286,17 @@ if [ -f /etc/sddm.conf ]; then
     sudo sed -i '/^Session=/d' /etc/sddm.conf 2>/dev/null || true
     sudo sed -i '/^User=/d' /etc/sddm.conf 2>/dev/null || true
 
+    # Also clean up any autologin overrides in sddm.conf.d config files
+    if [ -d /etc/sddm.conf.d ]; then
+        for f in /etc/sddm.conf.d/*.conf; do
+            if [ -f "$f" ]; then
+                sudo sed -i '/^\[Autologin\]/,/^\s*$/d' "$f" 2>/dev/null || true
+                sudo sed -i '/^Session=/d' "$f" 2>/dev/null || true
+                sudo sed -i '/^User=/d' "$f" 2>/dev/null || true
+            fi
+        done
+    fi
+
     if ! grep -q "^Current=" /etc/sddm.conf; then
         echo -e "\n[Theme]\nCurrent=sddm-astronaut-theme" | sudo tee -a /etc/sddm.conf >/dev/null
     else
