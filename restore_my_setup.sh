@@ -71,13 +71,13 @@ fi
 # Detect CachyOS/Arch base
 if [ ! -f /etc/arch-release ]; then
     echo -e "${YELLOW}[WARNING] This script is designed for Arch Linux / CachyOS. Proceed with caution on other distributions!${NC}"
-    read -p " :: Press Enter to continue anyway, or Ctrl+C to abort..."
+    read -p " :: Press Enter to continue anyway, or Ctrl+C to abort..." </dev/tty
 fi
 
 # Detect other Desktop Environments
 if [ -n "$XDG_CURRENT_DESKTOP" ] && [ "$XDG_CURRENT_DESKTOP" != "Hyprland" ]; then
     echo -e "${YELLOW}[WARNING] You are currently running the '$XDG_CURRENT_DESKTOP' desktop environment.${NC}"
-    read -p "Wanna start the setup? (This setup will change your desktop environment to Hyprland + HyDE) (y/n): " confirm_setup
+    read -p "Wanna start the setup? (This setup will change your desktop environment to Hyprland + HyDE) (y/n): " confirm_setup </dev/tty
     if [[ ! "$confirm_setup" =~ ^[Yy]$ ]]; then
         echo -e "${RED}[INFO] Installation aborted by user.${NC}"
         exit 0
@@ -90,7 +90,7 @@ echo -e "${BLUE}${BOLD}           CachyOS + Hyprland Installation Manager       
 echo -e "${BLUE}${BOLD}==============================================================${NC}"
 
 # 1. Confirm overall installation
-read -p "Do you want to run the full system restoration setup? (y/n) [y]: " main_confirm
+read -p "Do you want to run the full system restoration setup? (y/n) [y]: " main_confirm </dev/tty
 main_confirm="${main_confirm:-y}"
 if [[ ! "$main_confirm" =~ ^[Yy]$ ]]; then
     echo -e "${RED}[INFO] Setup aborted by user.${NC}"
@@ -98,19 +98,19 @@ if [[ ! "$main_confirm" =~ ^[Yy]$ ]]; then
 fi
 
 # 2. Package installation preference
-read -p "Do you want to install/upgrade required system packages? (y/n) [y]: " opt_install_pkgs
+read -p "Do you want to install/upgrade required system packages? (y/n) [y]: " opt_install_pkgs </dev/tty
 opt_install_pkgs="${opt_install_pkgs:-y}"
 
 # 3. HyDE Desktop Environment framework deployment preference
-read -p "Do you want to deploy/upgrade the HyDE Desktop Environment framework? (y/n) [y]: " opt_deploy_hyde
+read -p "Do you want to deploy/upgrade the HyDE Desktop Environment framework? (y/n) [y]: " opt_deploy_hyde </dev/tty
 opt_deploy_hyde="${opt_deploy_hyde:-y}"
 
 # 4. Desktop Custom Dotfiles deployment preference
-read -p "Do you want to write/overwrite customized dotfiles (Hyprland, Waybar, Zsh, Kitty, Cava, VS Code, Zen)? (y/n) [y]: " opt_deploy_dots
+read -p "Do you want to write/overwrite customized dotfiles (Hyprland, Waybar, Zsh, Kitty, Cava, VS Code, Zen)? (y/n) [y]: " opt_deploy_dots </dev/tty
 opt_deploy_dots="${opt_deploy_dots:-y}"
 
 # 5. Helper scripts (hotspot, nightlight, etc.) installation preference
-read -p "Do you want to write/overwrite custom helper scripts (starthotspot.sh, nightlight-gui, display settings)? (y/n) [y]: " opt_helper_scripts
+read -p "Do you want to write/overwrite custom helper scripts (starthotspot.sh, nightlight-gui, display settings)? (y/n) [y]: " opt_helper_scripts </dev/tty
 opt_helper_scripts="${opt_helper_scripts:-y}"
 
 # 1. Detect/Install AUR Helper (yay/paru)
@@ -218,7 +218,7 @@ echo -e "2) Nvidia proprietary drivers"
 echo -e "3) AMD open-source drivers"
 echo -e "4) Intel open-source drivers"
 echo -e "5) Skip GPU-specific drivers"
-read -p "Select choice [1-5] (Default 1): " gpu_choice
+read -p "Select choice [1-5] (Default 1): " gpu_choice </dev/tty
 gpu_choice="${gpu_choice:-1}"
 
 GPU_VENDOR="$AUTO_GPU"
@@ -529,14 +529,14 @@ echo -e "${CYAN}${BOLD}====================================================${NC}
 echo -e "Saved Default: SSID: ${YELLOW}${SSID}${NC} | Password: ${YELLOW}${PASSPHRASE}${NC}"
 echo -e "1) Start with default settings"
 echo -e "2) Configure new SSID and Password"
-read -p "Choose option [1-2] (Default 1): " choice
+read -p "Choose option [1-2] (Default 1): " choice </dev/tty
 choice="${choice:-1}"
 
 if [ "$choice" -eq 2 ]; then
-    read -p "Enter new SSID (Press Enter for default '$SSID'): " new_ssid
+    read -p "Enter new SSID (Press Enter for default '$SSID'): " new_ssid </dev/tty
     SSID="${new_ssid:-$SSID}"
     while true; do
-        read -p "Enter new Password (min 8 chars, Press Enter for default): " new_pass
+        read -p "Enter new Password (min 8 chars, Press Enter for default): " new_pass </dev/tty
         new_pass="${new_pass:-$PASSPHRASE}"
         if [ ${#new_pass} -lt 8 ]; then
             echo -e "${RED}[!] Password must be at least 8 characters long.${NC}"
@@ -546,7 +546,7 @@ if [ "$choice" -eq 2 ]; then
         fi
     done
 
-    read -p "Save this configuration as default? (y/n) [y]: " save_choice
+    read -p "Save this configuration as default? (y/n) [y]: " save_choice </dev/tty
     save_choice="${save_choice:-y}"
     if [[ "$save_choice" =~ ^[Yy]$ ]]; then
         mkdir -p "$CONFIG_DIR"
@@ -3143,7 +3143,7 @@ fi
 
 if [ "$IS_LAPTOP" = "true" ] || [ "$HAS_TOUCHPAD" = "true" ]; then
     echo -e "\n${YELLOW}[PROMPT] Laptop/Touchpad detected on this device.${NC}"
-    read -p "Touch pad like windows? (y/n): " tp_windows_choice
+    read -p "Touch pad like windows? (y/n): " tp_windows_choice </dev/tty
     if [[ "$tp_windows_choice" =~ ^[Yy]$ ]]; then
         echo -e "${CYAN}Configuring touchpad to behave like Windows (Standard Scrolling)...${NC}"
         mkdir -p "$HOME/.config/hypr"
@@ -4896,7 +4896,7 @@ fi
 DISABLE_FAILLOCK_OPTION="n"
 echo -e "\n${YELLOW}[INFO] Entering a wrong sudo password multiple times can trigger user lockout (pam_faillock)"
 echo -e "which locks your account for 10 minutes. You can permanently disable this policy.${NC}"
-read -p "Do you want to permanently disable account lockouts on this system? (y/n) [n]: " faillock_choice
+read -p "Do you want to permanently disable account lockouts on this system? (y/n) [n]: " faillock_choice </dev/tty
 if [[ "$faillock_choice" =~ ^[Yy]$ ]]; then
     DISABLE_FAILLOCK_OPTION="y"
 fi
@@ -5535,7 +5535,7 @@ fi # End of opt_deploy_dots
 echo -e "\n${GREEN}${BOLD}======================================================================${NC}"
 echo -e "${GREEN}${BOLD}   CONGRATULATIONS! System Restoration is Complete!                  ${NC}"
 echo -e "${GREEN}${BOLD}======================================================================${NC}"
-read -p "Would you like to reboot the system now to apply all changes? (y/n) [y]: " reboot_confirm
+read -p "Would you like to reboot the system now to apply all changes? (y/n) [y]: " reboot_confirm </dev/tty
 reboot_confirm="${reboot_confirm:-y}"
 if [[ "$reboot_confirm" =~ ^[Yy]$ ]]; then
     echo -e "${YELLOW}Rebooting the system in 5 seconds...${NC}"
